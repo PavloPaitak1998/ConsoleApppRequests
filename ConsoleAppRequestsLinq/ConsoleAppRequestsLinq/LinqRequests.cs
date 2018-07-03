@@ -20,6 +20,11 @@ namespace ConsoleAppRequestsLinq
             return _comments.Where(c => c.UserId == id && c.Body.Length < 50);
         }
 
+        //3
+        static IEnumerable<(int Id, string Name)> GetUserTodos(int id, IEnumerable<Todo> _todos)
+        {
+            return _todos.Where(t => t.UserId == id && t.IsComplete == true).Select(t => (Id: t.Id, Name: t.Name));
+        }
 
     }
 }
