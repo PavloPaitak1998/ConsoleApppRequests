@@ -26,5 +26,21 @@ namespace ConsoleAppRequestsLinq
             return _todos.Where(t => t.UserId == id && t.IsComplete == true).Select(t => (Id: t.Id, Name: t.Name));
         }
 
+        //4
+        static IEnumerable<User> GetSortedUsers(IEnumerable<User> _usersEntity)
+        {
+            return _usersEntity.OrderBy(u => u.Name).Select(
+                (u) => new User
+                {
+                    Id = u.Id,
+                    Name = u.Name,
+                    Avatar = u.Avatar,
+                    CreatedAt = u.CreatedAt,
+                    Email = u.Email,
+                    Posts = u.Posts,
+                    Todos = u.Todos.OrderByDescending(todo => todo.Name.Length).ToList()
+                });
+        }
+
     }
 }
