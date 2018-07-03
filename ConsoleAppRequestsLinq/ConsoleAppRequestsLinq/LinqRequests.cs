@@ -9,7 +9,7 @@ namespace ConsoleAppRequestsLinq
     static class LinqRequests
     {
         //1
-        static IEnumerable<(Post post, int count)> CommentsCount(int id, 
+        public static IEnumerable<(Post post, int count)> CommentsCount(int id, 
             IEnumerable<Post> _postsEntity)
         {
             return _postsEntity.Where(p => p.UserId == id)
@@ -17,13 +17,13 @@ namespace ConsoleAppRequestsLinq
         }
 
         //2
-        static IEnumerable<Comment> GetUserComments(int id, IEnumerable<Comment> _comments)
+        public static IEnumerable<Comment> GetUserComments(int id, IEnumerable<Post> _postsEntity)
         {
-            return _comments.Where(c => c.UserId == id && c.Body.Length < 50);
+            return _postsEntity.Where(p => p.UserId == id).SelectMany(p=>p.Comments.Where(c=>c.Body.Length<50));
         }
 
         //3
-        static IEnumerable<(int Id, string Name)> GetUserTodos(int id,
+        public static IEnumerable<(int Id, string Name)> GetUserTodos(int id,
             IEnumerable<Todo> _todos)
         {
             return _todos.Where(t => t.UserId == id && t.IsComplete == true)
@@ -31,7 +31,7 @@ namespace ConsoleAppRequestsLinq
         }
 
         //4
-        static IEnumerable<User> GetSortedUsers(IEnumerable<User> _usersEntity)
+        public static IEnumerable<User> GetSortedUsers(IEnumerable<User> _usersEntity)
         {
             return _usersEntity.OrderBy(u => u.Name).Select(
                 (u) => new User
@@ -47,7 +47,7 @@ namespace ConsoleAppRequestsLinq
         }
 
         //5
-        static (User User, Post LastPost, int CountComments, 
+        public static (User User, Post LastPost, int CountComments, 
             int UncompletedTasks, Post MostPopularPostByComments, 
             Post MostPopularPostByLikes) GetAdditionalUserInfo(int id,
             IEnumerable<User> _usersEntity)
@@ -83,7 +83,7 @@ namespace ConsoleAppRequestsLinq
         }
 
         //6
-        static (Post Post, Comment LongestComment, Comment LikestComment, int CountComments)
+        public static (Post Post, Comment LongestComment, Comment LikestComment, int CountComments)
             GetAdditionalPostInfo(int id, IEnumerable<Post> _postsEntity)
         {
             var res = from p in _postsEntity
@@ -108,6 +108,44 @@ namespace ConsoleAppRequestsLinq
                       CountComments: countComments
                       );
             return res.FirstOrDefault();
+        }
+
+        public static List<Post> GetPostsEntity(List<Post> _posts, List<Comment> _comments)
+        {
+            var postsEntity = (from p in _posts
+                               join c in _comments on p.Id equals c.PostId into postComments
+                               select new Post
+                               {
+                                   Id = p.Id,
+                                   Body = p.Body,
+                                   Title = p.Title,
+                                   CreatedAt = p.CreatedAt,
+                                   Likes = p.Likes,
+                                   UserId = p.UserId,
+                                   Comments = postComments.ToList()
+                               }).ToList();
+
+            return postsEntity;
+        }
+
+        public static List<User> GetUsersEntity(List<User> _users,
+            List<Post> _postsEntity, List<Todo> _todos)
+        {
+            var usersEntity = (from u in _users
+                               join p in _postsEntity on u.Id equals p.UserId into userPosts
+                               join t in _todos on u.Id equals t.UserId into userTodos
+                               select new User
+                               {
+                                   Id = u.Id,
+                                   CreatedAt = u.CreatedAt,
+                                   Avatar = u.Avatar,
+                                   Email = u.Email,
+                                   Name = u.Name,
+                                   Posts = userPosts.ToList(),
+                                   Todos = userTodos.ToList()
+                               }).ToList();
+
+            return usersEntity;
         }
 
     }
