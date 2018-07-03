@@ -15,6 +15,8 @@ namespace ConsoleAppRequestsLinq
         public int Likes { get; set; }
         public string CreatedAt { get; set; }
 
+        public List<Comment> Comments { get; set; }
+
         public override string ToString()
         {
             return $"Id: {Id}; Title: {Title}; Body: {Body}; UserId: {UserId}; Likes: {Likes}; CreatedAt: {CreatedAt}";
