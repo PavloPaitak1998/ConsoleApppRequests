@@ -11,7 +11,8 @@ namespace ConsoleAppRequestsLinq
         //1
         static IEnumerable<(Post post, int count)> CommentsCount(int id, IEnumerable<Post> _postsEntity)
         {
-            return _postsEntity.Where(p => p.UserId == id).Select(p => (Post: p, Count: p.Comments.Count()));
+            return _postsEntity.Where(p => p.UserId == id)
+                .Select(p => (Post: p, Count: p.Comments.Count()));
         }
 
         //2
@@ -23,7 +24,8 @@ namespace ConsoleAppRequestsLinq
         //3
         static IEnumerable<(int Id, string Name)> GetUserTodos(int id, IEnumerable<Todo> _todos)
         {
-            return _todos.Where(t => t.UserId == id && t.IsComplete == true).Select(t => (Id: t.Id, Name: t.Name));
+            return _todos.Where(t => t.UserId == id && t.IsComplete == true)
+                .Select(t => (Id: t.Id, Name: t.Name));
         }
 
         //4
@@ -40,6 +42,41 @@ namespace ConsoleAppRequestsLinq
                     Posts = u.Posts,
                     Todos = u.Todos.OrderByDescending(todo => todo.Name.Length).ToList()
                 });
+        }
+
+        //5
+        static (User User, Post LastPost, int CountComments, 
+            int UncompletedTasks, Post MostPopularPostByComments, 
+            Post MostPopularPostByLikes) GetAdditionalUserInfo(int id, IEnumerable<User> _usersEntity)
+        {
+            var res = from u in _usersEntity
+                      where u.Id == id
+
+                      let lastPost = u.Posts.
+                      OrderByDescending(p => DateTime.Parse(p.CreatedAt))
+                      .FirstOrDefault()
+
+                      let countComments = lastPost == null ? 0 : lastPost.Comments.Count()
+
+                      let uncompletedTasks = u.Todos.Where(t => t.IsComplete == false).Count()
+
+                      let mostPopularPostByComments = u.Posts.
+                      OrderByDescending(p => p.Comments.Where(c => c.Body.Length > 80)
+                      .Count()).FirstOrDefault()
+
+                      let mostPopularPostByLikes = u.Posts.
+                      OrderByDescending(p => p.Likes).FirstOrDefault()
+
+                      select (
+                      User: u,
+                      LastPost: lastPost,
+                      CountComments: countComments,
+                      UncompletedTasks: uncompletedTasks,
+                      MostPopularPostByComments: mostPopularPostByComments,
+                      MostPopularPostByLikes: mostPopularPostByLikes
+                      );
+
+            return res.FirstOrDefault();
         }
 
     }
