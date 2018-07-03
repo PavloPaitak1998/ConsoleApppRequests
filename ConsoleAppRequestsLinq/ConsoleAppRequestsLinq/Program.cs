@@ -33,6 +33,8 @@ namespace ConsoleAppRequestsLinq
             List<Post> postsEntity = GetPostsEntity(posts, comments);
             List<User> usersEntity = GetUsersEntity(users, postsEntity, todos);
 
+
+
         }
 
         static List<Post> GetPostsEntity(List<Post> _posts, List<Comment> _comments)
@@ -53,7 +55,8 @@ namespace ConsoleAppRequestsLinq
             return postsEntity;
         }
 
-        static List<User> GetUsersEntity(List<User> _users, List<Post> _postsEntity, List<Todo> _todos)
+        static List<User> GetUsersEntity(List<User> _users,
+            List<Post> _postsEntity, List<Todo> _todos)
         {
             var usersEntity = (from u in _users
                                join p in _postsEntity on u.Id equals p.UserId into userPosts

@@ -9,7 +9,8 @@ namespace ConsoleAppRequestsLinq
     static class LinqRequests
     {
         //1
-        static IEnumerable<(Post post, int count)> CommentsCount(int id, IEnumerable<Post> _postsEntity)
+        static IEnumerable<(Post post, int count)> CommentsCount(int id, 
+            IEnumerable<Post> _postsEntity)
         {
             return _postsEntity.Where(p => p.UserId == id)
                 .Select(p => (Post: p, Count: p.Comments.Count()));
@@ -22,7 +23,8 @@ namespace ConsoleAppRequestsLinq
         }
 
         //3
-        static IEnumerable<(int Id, string Name)> GetUserTodos(int id, IEnumerable<Todo> _todos)
+        static IEnumerable<(int Id, string Name)> GetUserTodos(int id,
+            IEnumerable<Todo> _todos)
         {
             return _todos.Where(t => t.UserId == id && t.IsComplete == true)
                 .Select(t => (Id: t.Id, Name: t.Name));
@@ -47,7 +49,8 @@ namespace ConsoleAppRequestsLinq
         //5
         static (User User, Post LastPost, int CountComments, 
             int UncompletedTasks, Post MostPopularPostByComments, 
-            Post MostPopularPostByLikes) GetAdditionalUserInfo(int id, IEnumerable<User> _usersEntity)
+            Post MostPopularPostByLikes) GetAdditionalUserInfo(int id,
+            IEnumerable<User> _usersEntity)
         {
             var res = from u in _usersEntity
                       where u.Id == id
@@ -80,8 +83,8 @@ namespace ConsoleAppRequestsLinq
         }
 
         //6
-        static (Post Post, Comment LongestComment, Comment LikestComment, int CountComments) GetAdditionalPostInfo
-    (int id, IEnumerable<Post> _postsEntity)
+        static (Post Post, Comment LongestComment, Comment LikestComment, int CountComments)
+            GetAdditionalPostInfo(int id, IEnumerable<Post> _postsEntity)
         {
             var res = from p in _postsEntity
                       where p.Id == id
