@@ -26,14 +26,14 @@ namespace ConsoleAppRequestsLinq
                 User
                 Last post by user(by date)
                 Number of comments under the last post
-                Number of unloaded trays for the user
+                Number of unloaded todo for the user
                 The most popular user post(where there are most comments with a 
                 text length of more than 80 characters)
                 The most popular user post(where most of all are keynotes)" + "\n");
             Console.Write(@"6-Get the following structure
                 Post
                 The longest post comment
-                The most zealous post comment
+                The likest post comment
                 The number of comments under the post where or 0 words or the 
                 length of the text is <80" + "\n");
 
@@ -44,7 +44,7 @@ namespace ConsoleAppRequestsLinq
         {
             int act = 0;
             int userId, postId;
-            //Сhecking and processing the input of the action
+
             while (true)
             {
                 try
@@ -97,6 +97,7 @@ namespace ConsoleAppRequestsLinq
                     }
                 case 3:
                     {
+
                         userId = GetId();
                         foreach (var i in LinqRequests.GetUserTodos(userId, dataSource.Todos))
                         {
@@ -132,7 +133,6 @@ namespace ConsoleAppRequestsLinq
                         userId = GetId();
 
                         var i = LinqRequests.GetAdditionalUserInfo(userId, usersEntity);
-                        Console.WriteLine(new string('=', 80));
                         Console.WriteLine("\n" + i.User + "\n");
                         Console.WriteLine("Last Post: {0}\n", i.LastPost + "\n");
                         Console.WriteLine("Count commnets: {0}\n", i.CountComments + "\n");
@@ -149,7 +149,6 @@ namespace ConsoleAppRequestsLinq
                         {
                             postsEntity = dataSource.GetPostsEntity();
                         }
-
                         postId = GetId();
 
                         var i = LinqRequests.GetAdditionalPostInfo(postId, postsEntity);
@@ -170,7 +169,7 @@ namespace ConsoleAppRequestsLinq
         {
             int id = 0;
 
-            Console.WriteLine("Please input User Id.");
+            Console.WriteLine("Please input Id.");
 
             while (true)
             {
@@ -193,7 +192,6 @@ namespace ConsoleAppRequestsLinq
                     continue;
                 }
             }
-
             return id;
         }
 
