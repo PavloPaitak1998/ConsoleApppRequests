@@ -79,5 +79,33 @@ namespace ConsoleAppRequestsLinq
             return res.FirstOrDefault();
         }
 
+        //6
+        static (Post Post, Comment LongestComment, Comment LikestComment, int CountComments) GetAdditionalPostInfo
+    (int id, IEnumerable<Post> _postsEntity)
+        {
+            var res = from p in _postsEntity
+                      where p.Id == id
+
+                      let longestComment = p.Comments
+                      .OrderByDescending(c => c.Body.Length)
+                      .FirstOrDefault()
+
+                      let likestComment = p.Comments
+                      .OrderByDescending(c => c.Likes)
+                      .FirstOrDefault()
+
+                      let countComments = p.Comments
+                      .Where(c => c.Likes == 0 || c.Body.Length < 80)
+                      .Count()
+
+                      select (
+                      Post: p,
+                      LongestComment: longestComment,
+                      LikestComment: likestComment,
+                      CountComments: countComments
+                      );
+            return res.FirstOrDefault();
+        }
+
     }
 }
