@@ -19,7 +19,8 @@ namespace ConsoleAppRequestsLinq
         //2
         public static IEnumerable<Comment> GetUserComments(int id, IEnumerable<Post> _postsEntity)
         {
-            return _postsEntity.Where(p => p.UserId == id).SelectMany(p=>p.Comments.Where(c=>c.Body.Length<50));
+            return _postsEntity.Where(p => p.UserId == id)
+                .SelectMany(p=>p.Comments.Where(c=>c.Body.Length<50));
         }
 
         //3

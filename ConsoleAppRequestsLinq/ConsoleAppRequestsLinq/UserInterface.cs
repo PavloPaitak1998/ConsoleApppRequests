@@ -12,7 +12,6 @@ namespace ConsoleAppRequestsLinq
         static List<Post> postsEntity;
         static List<User> usersEntity;
 
-
         public static void RequestInfo()
         {
             Console.ForegroundColor = ConsoleColor.White;
@@ -73,10 +72,20 @@ namespace ConsoleAppRequestsLinq
                         {
                             postsEntity = dataSource.GetPostsEntity();
                         }
-                        userId = GetId();
-                        foreach (var i in LinqRequests.CommentsCount(userId, postsEntity))
+
+                        userId = GetId("user");
+
+                        var listPostCount = LinqRequests.CommentsCount(userId, postsEntity);
+
+                        if (listPostCount.Count()<1)
                         {
-                            Console.WriteLine("Post:\n {0}\n Count of comments: {1}",i.post,i.count);
+                            Console.WriteLine("This user Id:{0} doesnt have any posts.",userId);
+                            break;
+                        }
+
+                        foreach (var i in listPostCount)
+                        {
+                            Console.WriteLine("Post:\n {0}\nCount of comments: {1}\n",i.post,i.count);
                         } 
                         break;
                     }
@@ -87,18 +96,26 @@ namespace ConsoleAppRequestsLinq
                             postsEntity = dataSource.GetPostsEntity();
                         }
 
-                        userId = GetId();
+                        userId = GetId("user");
 
-                        foreach (var c in LinqRequests.GetUserComments(userId, postsEntity))
+                        var listPost = LinqRequests.GetUserComments(userId, postsEntity);
+
+                        if (listPost.Count() < 1)
                         {
-                            Console.WriteLine(c);
+                            Console.WriteLine("This user Id:{0} doesnt have any comments in which body < 50 under post.", userId);
+                            break;
+                        }
+
+                        foreach (var c in listPost)
+                        {
+                            Console.WriteLine("Comment:\n{0}\n",c);
                         }
                         break;
                     }
                 case 3:
                     {
+                        userId = GetId("user");
 
-                        userId = GetId();
                         foreach (var i in LinqRequests.GetUserTodos(userId, dataSource.Todos))
                         {
                             Console.WriteLine("Todo Id: {0}; Name: {1}", i.Id, i.Name);
@@ -130,7 +147,8 @@ namespace ConsoleAppRequestsLinq
                         {
                             usersEntity = dataSource.GetUsersEntity();
                         }
-                        userId = GetId();
+
+                        userId = GetId("user");
 
                         var i = LinqRequests.GetAdditionalUserInfo(userId, usersEntity);
                         Console.WriteLine("\n" + i.User + "\n");
@@ -149,7 +167,8 @@ namespace ConsoleAppRequestsLinq
                         {
                             postsEntity = dataSource.GetPostsEntity();
                         }
-                        postId = GetId();
+
+                        postId = GetId("post");
 
                         var i = LinqRequests.GetAdditionalPostInfo(postId, postsEntity);
                         Console.WriteLine("Post: {0}\n", i.Post);
@@ -165,21 +184,29 @@ namespace ConsoleAppRequestsLinq
             }
         }
 
-        public static int GetId()
+        static int GetId(string whoseId)
         {
             int id = 0;
-
-            Console.WriteLine("Please input Id.");
 
             while (true)
             {
                 try
                 {
-                    Console.WriteLine("Id :");
+                    Console.WriteLine($"Please input {whoseId} Id.");
+                    Console.Write("Id: ");
                     id = int.Parse(Console.ReadLine());
                     if (id < 0)
                     {
                         throw new FormatException();
+                    }
+
+                    if (!CheckId(id, whoseId))
+                    {
+                        Console.Clear();
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("There is no such user id. Please try again.");
+                        Console.ForegroundColor = ConsoleColor.White;
+                        continue;
                     }
                     break;
                 }
@@ -193,6 +220,20 @@ namespace ConsoleAppRequestsLinq
                 }
             }
             return id;
+        }
+
+        static bool CheckId(int id,string whoseId)
+        {
+            if (whoseId == "user")
+            {
+                return dataSource.Users.Exists(u => u.Id == id);
+            }
+            else if (whoseId == "post")
+            {
+                return dataSource.Posts.Exists(p => p.Id == id);
+            }
+            else
+                throw new Exception("Uncorrect type id. There is only user/post id.");
         }
 
     }
