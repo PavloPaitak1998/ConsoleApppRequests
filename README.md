@@ -1,4 +1,4 @@
-# ConsoleApppRequests
+# ConsoleAppRequests
 
    This is a simple  Console Appp on C# which makes HTTP request on server and retrieves some JSON data and then deserializes it to use linq requests.
 
