@@ -9,6 +9,7 @@
 #### 2) Use HttpClient (or WebClient) to receive a set of the open data by means of API of requests to https://5b128555d50a5c0014ef1204.mockapi.io/:endpoint
 
 Where _endpoint_ can have the following values:
+     
      users
 
      posts
