@@ -17,8 +17,8 @@ Where _endpoint_ can have the following values:
 
      todos
 
-address
-#### 3) Present the received data as a set of entities (nested objects).
+      address
+   #### 3) Present the received data as a set of entities (nested objects).
      -Users
  
      --- Posts
@@ -35,40 +35,41 @@ In order to determine the relationship, you must use id. To create a hierarchy, 
 
 #### 6) List of requests:
 
-1. Get the number of comments under the posts of a particular user (on aidi) (list from post-number)
+      1. Get the number of comments under the posts of a particular user (on aidi) (list from post-number)
 
-2. Get a list of comments under the posts of a particular user (on aide), where body comment <50 characters (list of comments)
+      2. Get a list of comments under the posts of a particular user (on aide), where body comment <50 characters (list of comments)
 
-3. Get the list (id, name) from the list of todos that are executed for a specific user (by IDE)
+      3. Get the list (id, name) from the list of todos that are executed for a specific user (by IDE)
 
-4. Get a list of users in alphabetical order (ascending) with sorted todo items by length name (descending)
+      4. Get a list of users in alphabetical order (ascending) with sorted todo items by length name (descending)
 
-5. Get the following structure (pass User Id to parameters)
+      5. Get the following structure (pass User Id to parameters)
 
-    * User
+          * User
 
-    * Last post by user (by date)
+          * Last post by user (by date)
 
-    * Number of comments under the last post
+          * Number of comments under the last post
 
-    * Number of unfulfilled tasks for the user
+          * Number of unfulfilled tasks for the user
 
-    * The most popular user post (where most of the comments with a text length of more than 80 characters)
+          * The most popular user post (where most of the comments with a text length of more than 80 characters)
 
-    * The most popular user post (where most of the likes)
+          * The most popular user post (where most of the likes)
 
-6. Get the following structure (pass the Id post to the parameters)
+      6. Get the following structure (pass the Id post to the parameters)
 
-    * Post
+          * Post
 
-    * The longest comment of the post
+          * The longest comment of the post
 
-    * The most lukewarm comment on the post
-  
-    * Number of comments under the post where or 0 likes or text length <80
+          * The most lukewarm comment on the post
+
+          * Number of comments under the post where or 0 likes or text length <80
     
-### Attention
-*Each sample must be performed in one method.*  
+ ### Attention
+
+_**Each sample must be performed in one method.**_
     
 ### Have fun :)
 _“Quality is much better than quantity. One home run is much better than two doubles.”
