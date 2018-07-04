@@ -37,6 +37,7 @@ namespace ConsoleAppRequestsLinq
                 length of the text is <80" + "\n");
 
             Console.WriteLine("0-Leave");
+            Console.Write("Your action: ");
         }
 
         public static void Action()
@@ -79,7 +80,7 @@ namespace ConsoleAppRequestsLinq
 
                         if (listPostCount.Count()<1)
                         {
-                            Console.WriteLine("This user Id:{0} doesnt have any posts.",userId);
+                            Console.WriteLine("This user Id:{0} doesnt have any posts.\n",userId);
                             break;
                         }
 
@@ -102,7 +103,7 @@ namespace ConsoleAppRequestsLinq
 
                         if (listPost.Count() < 1)
                         {
-                            Console.WriteLine("This user Id:{0} doesnt have any comments in which body < 50 under post.", userId);
+                            Console.WriteLine("This user Id:{0} doesnt have any comments in which body < 50 under post.\n", userId);
                             break;
                         }
 
@@ -116,9 +117,17 @@ namespace ConsoleAppRequestsLinq
                     {
                         userId = GetId("user");
 
-                        foreach (var i in LinqRequests.GetUserTodos(userId, dataSource.Todos))
+                        var listIdName = LinqRequests.GetUserTodos(userId, dataSource.Todos);
+
+                        if (listIdName.Count() < 1)
                         {
-                            Console.WriteLine("Todo Id: {0}; Name: {1}", i.Id, i.Name);
+                            Console.WriteLine("This user Id:{0} doesnt have any completed task.\n", userId);
+                            break;
+                        }
+
+                        foreach (var i in listIdName)
+                        {
+                            Console.WriteLine("Todo Id: {0}; Name: {1}\n", i.Id, i.Name);
                         }
                         break;
                     }
@@ -128,13 +137,14 @@ namespace ConsoleAppRequestsLinq
                         {
                             usersEntity = dataSource.GetUsersEntity();
                         }
+
                         foreach (var u in LinqRequests.GetSortedUsers(usersEntity))
                         {
-                            Console.WriteLine(u.Name);
+                            Console.WriteLine("User Name: {0}",u.Name);
 
                             foreach (var t in u.Todos)
                             {
-                                Console.WriteLine(t.Name);
+                                Console.WriteLine("Todo: {0}",t.Name);
                             }
                             Console.WriteLine();
                         }
@@ -151,12 +161,12 @@ namespace ConsoleAppRequestsLinq
                         userId = GetId("user");
 
                         var i = LinqRequests.GetAdditionalUserInfo(userId, usersEntity);
-                        Console.WriteLine("\n" + i.User + "\n");
-                        Console.WriteLine("Last Post: {0}\n", i.LastPost + "\n");
-                        Console.WriteLine("Count commnets: {0}\n", i.CountComments + "\n");
-                        Console.WriteLine("Uncompleted tasks: {0}\n", i.UncompletedTasks + "\n");
-                        Console.WriteLine("Most popular post by comments: {0}\n", i.MostPopularPostByComments == null ? "0" : i.MostPopularPostByComments.ToString());
-                        Console.WriteLine("Most popular post by likes: {0}\n", i.MostPopularPostByLikes);
+                        Console.WriteLine("User:\n{0}\n",i.User);
+                        Console.WriteLine("Last Post: {0}\n", i.LastPost == null ? "Absent": i.LastPost.ToString());
+                        Console.WriteLine("Count commnets: {0}\n", i.CountComments);
+                        Console.WriteLine("Uncompleted tasks: {0}\n", i.UncompletedTasks);
+                        Console.WriteLine("Most popular post by comments: {0}\n", i.MostPopularPostByComments == null ? "Absent" : i.MostPopularPostByComments.ToString());
+                        Console.WriteLine("Most popular post by likes: {0}\n", i.MostPopularPostByLikes == null ? "Absent" : i.MostPopularPostByLikes.ToString());
 
                         break;
 
@@ -195,6 +205,7 @@ namespace ConsoleAppRequestsLinq
                     Console.WriteLine($"Please input {whoseId} Id.");
                     Console.Write("Id: ");
                     id = int.Parse(Console.ReadLine());
+                    Console.WriteLine();
                     if (id < 0)
                     {
                         throw new FormatException();
