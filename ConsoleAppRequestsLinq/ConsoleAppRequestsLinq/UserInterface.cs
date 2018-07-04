@@ -169,7 +169,6 @@ namespace ConsoleAppRequestsLinq
                         Console.WriteLine("Most popular post by likes: {0}\n", i.MostPopularPostByLikes == null ? "Absent" : i.MostPopularPostByLikes.ToString());
 
                         break;
-
                     }
                 case 6:
                     {
@@ -182,8 +181,8 @@ namespace ConsoleAppRequestsLinq
 
                         var i = LinqRequests.GetAdditionalPostInfo(postId, postsEntity);
                         Console.WriteLine("Post: {0}\n", i.Post);
-                        Console.WriteLine("Longest comment: {0}\n", i.LongestComment);
-                        Console.WriteLine("Likest comment: {0}\n", i.LikestComment);
+                        Console.WriteLine("Longest comment: {0}\n", i.LongestComment == null ? "Absent" : i.LongestComment.ToString());
+                        Console.WriteLine("Likest comment: {0}\n", i.LikestComment == null ? "Absent" : i.LikestComment.ToString());
                         Console.WriteLine("Count comments where 0 likes or body < 80: {0}\n", i.CountComments);
                         break;
                     }
