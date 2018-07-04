@@ -1,6 +1,6 @@
 # ConsoleApppRequests
 
-This is a simple  Console Appp on C# which makes HTTP request on server and retrieves some JSON data and then deserializes it to use linq requests.
+   This is a simple  Console Appp on C# which makes HTTP request on server and retrieves some JSON data and then deserializes it to use linq requests.
 
 ## To successfully do it you will need:
 
@@ -9,23 +9,23 @@ This is a simple  Console Appp on C# which makes HTTP request on server and retr
 #### 2) Use HttpClient (or WebClient) to receive a set of the open data by means of API of requests to https://5b128555d50a5c0014ef1204.mockapi.io/:endpoint
 
 Where _endpoint_ can have the following values:
-  > users
+     users
 
-  > posts
+     posts
 
-  > comments
+     comments
 
-  > todos
+     todos
 
 address
 #### 3) Present the received data as a set of entities (nested objects).
- > -Users
+     -Users
  
- > --- Posts
+     --- Posts
  
- > ------- Comments
+     ------- Comments
  
- > --- Todos
+     --- Todos
  
 #### 4) To deserialize, use [Newtonsoft](https://www.newtonsoft.com/json).
 
